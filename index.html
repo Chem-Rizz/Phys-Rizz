@@ -1,0 +1,2589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Phys Rizz - futuristic Physics learning platform for Karnataka Board Class 11 students.">
+  <title>Phys Rizz | Karnataka Board Class 11 Physics</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+:root {
+  color-scheme: dark;
+  --bg: #050711;
+  --bg-soft: #0b1024;
+  --panel: rgba(15, 24, 54, 0.68);
+  --panel-strong: rgba(18, 30, 66, 0.84);
+  --text: #eef5ff;
+  --muted: #9fb0d0;
+  --line: rgba(142, 190, 255, 0.18);
+  --blue: #27d8ff;
+  --cyan: #77f7ff;
+  --purple: #a855f7;
+  --pink: #ff4fe3;
+  --green: #65ffa8;
+  --danger: #ff6b8f;
+  --warning: #ffd166;
+  --shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+  --glass: blur(18px) saturate(150%);
+  --radius: 8px;
+  --max: 1180px;
+}
+
+body.light {
+  color-scheme: light;
+  --bg: #eef6ff;
+  --bg-soft: #dfeeff;
+  --panel: rgba(255, 255, 255, 0.72);
+  --panel-strong: rgba(255, 255, 255, 0.88);
+  --text: #10172a;
+  --muted: #4d5f7e;
+  --line: rgba(42, 95, 160, 0.2);
+  --shadow: 0 24px 60px rgba(45, 74, 115, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+  background:
+    linear-gradient(135deg, var(--bg) 0%, var(--bg-soft) 48%, var(--bg) 100%);
+  color: var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  letter-spacing: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.space-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+}
+
+.page-glow {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    linear-gradient(110deg, rgba(39, 216, 255, 0.09), transparent 30%, rgba(168, 85, 247, 0.1) 70%, transparent),
+    repeating-linear-gradient(90deg, transparent 0 110px, rgba(119, 247, 255, 0.025) 111px 112px);
+  mask-image: linear-gradient(to bottom, #000, rgba(0, 0, 0, 0.2));
+}
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 18px;
+  background: var(--bg);
+  transition: opacity 450ms ease, visibility 450ms ease;
+}
+
+.loader.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loader p {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+}
+
+.loader-orbit {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  border: 1px solid rgba(119, 247, 255, 0.35);
+  border-radius: 50%;
+  animation: spin 1.6s linear infinite;
+  box-shadow: 0 0 28px rgba(39, 216, 255, 0.28);
+}
+
+.loader-orbit::before {
+  content: "";
+  position: absolute;
+  inset: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  box-shadow: 0 0 26px var(--blue);
+}
+
+.loader-orbit span {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 18px var(--cyan);
+}
+
+.loader-orbit span:nth-child(1) { top: -5px; left: 40px; }
+.loader-orbit span:nth-child(2) { bottom: 10px; right: 4px; background: var(--purple); }
+.loader-orbit span:nth-child(3) { bottom: 10px; left: 4px; background: var(--pink); }
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  width: min(100% - 32px, var(--max));
+  margin: 14px auto 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(7, 12, 31, 0.72);
+  box-shadow: var(--shadow);
+  backdrop-filter: var(--glass);
+}
+
+body.light .site-header {
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.brand,
+.header-actions,
+.main-nav {
+  display: flex;
+  align-items: center;
+}
+
+.brand {
+  gap: 10px;
+  min-width: max-content;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(119, 247, 255, 0.42);
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, rgba(39, 216, 255, 0.2), rgba(168, 85, 247, 0.24));
+  color: #fff;
+  font-family: "Space Grotesk", Inter, sans-serif;
+  font-weight: 800;
+  box-shadow: 0 0 24px rgba(39, 216, 255, 0.25);
+}
+
+.brand strong {
+  display: block;
+  font-family: "Space Grotesk", Inter, sans-serif;
+  font-size: 1.05rem;
+}
+
+.brand small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.72rem;
+  margin-top: 2px;
+}
+
+.main-nav {
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.main-nav a {
+  padding: 10px 12px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+  transition: color 200ms ease, background 200ms ease, box-shadow 200ms ease;
+}
+
+.main-nav a:hover,
+.main-nav a.active {
+  color: var(--text);
+  background: rgba(39, 216, 255, 0.12);
+  box-shadow: inset 0 0 18px rgba(39, 216, 255, 0.1);
+}
+
+.header-actions {
+  gap: 8px;
+}
+
+.icon-button,
+.theme-toggle,
+.mini-button,
+.back-button,
+.glow-button,
+.ghost-button {
+  cursor: pointer;
+  border: 0;
+}
+
+.icon-button,
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius);
+  color: var(--text);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.055);
+}
+
+.sound-icon {
+  color: var(--cyan);
+  font-weight: 800;
+}
+
+.theme-toggle {
+  position: relative;
+  width: 66px;
+  justify-content: start;
+  padding: 5px;
+}
+
+.theme-dot {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  box-shadow: 0 0 18px rgba(39, 216, 255, 0.48);
+  transition: transform 240ms ease;
+}
+
+body.light .theme-dot {
+  transform: translateX(24px);
+}
+
+.nav-toggle {
+  display: none;
+  gap: 4px;
+}
+
+.nav-toggle span {
+  width: 18px;
+  height: 2px;
+  border-radius: 4px;
+  background: var(--text);
+}
+
+main {
+  width: min(100% - 32px, var(--max));
+  margin: 0 auto;
+  padding: 52px 0 80px;
+}
+
+.page {
+  display: none;
+  animation: pageIn 440ms ease both;
+}
+
+.page.active {
+  display: block;
+}
+
+.hero {
+  min-height: calc(100vh - 132px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.03fr) minmax(340px, 0.97fr);
+  align-items: center;
+  gap: 42px;
+}
+
+.eyebrow,
+.section-kicker {
+  color: var(--cyan);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: "Space Grotesk", Inter, sans-serif;
+  letter-spacing: 0;
+}
+
+h1 {
+  margin-top: 12px;
+  font-size: clamp(4rem, 12vw, 8.8rem);
+  line-height: 0.86;
+  color: #fff;
+  text-shadow:
+    0 0 26px rgba(39, 216, 255, 0.45),
+    0 0 56px rgba(168, 85, 247, 0.34);
+}
+
+body.light h1 {
+  color: #0f1b38;
+}
+
+.tagline {
+  max-width: 680px;
+  margin: 24px 0 0;
+  color: var(--muted);
+  font-size: clamp(1.08rem, 2vw, 1.42rem);
+  line-height: 1.7;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.glow-button,
+.ghost-button,
+.mini-button,
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  border-radius: var(--radius);
+  font-weight: 800;
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.glow-button {
+  color: #02111e;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  box-shadow: 0 0 26px rgba(39, 216, 255, 0.36), 0 0 48px rgba(168, 85, 247, 0.18);
+}
+
+.ghost-button,
+.mini-button,
+.back-button {
+  color: var(--text);
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.glow-button:hover,
+.ghost-button:hover,
+.mini-button:hover,
+.back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 28px rgba(39, 216, 255, 0.24);
+}
+
+.full {
+  width: 100%;
+}
+
+.hero-visual {
+  position: relative;
+  min-height: 520px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background:
+    linear-gradient(140deg, rgba(39, 216, 255, 0.08), rgba(168, 85, 247, 0.12)),
+    rgba(255, 255, 255, 0.03);
+  box-shadow: var(--shadow), inset 0 0 60px rgba(39, 216, 255, 0.08);
+  backdrop-filter: var(--glass);
+}
+
+.hero-visual canvas {
+  width: 100%;
+  height: 100%;
+  min-height: 520px;
+  display: block;
+}
+
+.equation-chip {
+  position: absolute;
+  padding: 10px 12px;
+  border: 1px solid rgba(119, 247, 255, 0.26);
+  border-radius: var(--radius);
+  background: rgba(5, 9, 22, 0.68);
+  color: var(--cyan);
+  font-family: "Space Grotesk", Inter, sans-serif;
+  font-weight: 700;
+  box-shadow: 0 0 22px rgba(39, 216, 255, 0.18);
+  animation: floaty 4.5s ease-in-out infinite;
+}
+
+.chip-a { top: 18%; left: 10%; }
+.chip-b { right: 9%; top: 43%; animation-delay: -1.2s; }
+.chip-c { left: 18%; bottom: 14%; animation-delay: -2.5s; }
+
+.stats-strip,
+.dashboard-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.stats-strip {
+  grid-template-columns: repeat(4, 1fr);
+  margin: 28px 0 16px;
+}
+
+.stats-strip article,
+.glass-card {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  backdrop-filter: var(--glass);
+}
+
+.stats-strip article {
+  padding: 20px;
+}
+
+.stats-strip span {
+  display: block;
+  color: var(--cyan);
+  font-family: "Space Grotesk", Inter, sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+.stats-strip p,
+.glass-card p,
+.page-heading p {
+  color: var(--muted);
+}
+
+.stats-strip p {
+  margin: 4px 0 0;
+}
+
+.dashboard-grid {
+  grid-template-columns: 1.4fr 0.8fr 0.8fr 0.8fr;
+  align-items: stretch;
+}
+
+.glass-card {
+  padding: 20px;
+}
+
+.qod-card h2 {
+  margin-top: 12px;
+  font-size: clamp(1.35rem, 2.4vw, 2.3rem);
+  line-height: 1.12;
+}
+
+.qod-options {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.option-button {
+  width: 100%;
+  min-height: 44px;
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--text);
+  text-align: left;
+  background: rgba(255, 255, 255, 0.055);
+  cursor: pointer;
+  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.option-button:hover {
+  transform: translateX(2px);
+  border-color: rgba(119, 247, 255, 0.42);
+}
+
+.option-button.correct {
+  border-color: rgba(101, 255, 168, 0.72);
+  background: rgba(101, 255, 168, 0.12);
+}
+
+.option-button.wrong {
+  border-color: rgba(255, 107, 143, 0.72);
+  background: rgba(255, 107, 143, 0.12);
+}
+
+.inline-result {
+  min-height: 24px;
+  margin: 12px 0 0;
+  font-weight: 800;
+}
+
+blockquote {
+  margin: 16px 0 18px;
+  color: var(--text);
+  font-size: 1.22rem;
+  line-height: 1.5;
+}
+
+.leaderboard-card ol {
+  margin: 16px 0 0;
+  padding-left: 22px;
+  color: var(--muted);
+}
+
+.leaderboard-card li {
+  margin: 10px 0;
+}
+
+.page-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.page-heading h2 {
+  margin-top: 8px;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 1;
+}
+
+.page-heading p {
+  max-width: 430px;
+  margin: 0;
+  line-height: 1.7;
+}
+
+.chapter-grid,
+.formula-grid,
+.pyq-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.chapter-card,
+.formula-card,
+.pyq-card {
+  position: relative;
+  min-height: 210px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  backdrop-filter: var(--glass);
+  transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.chapter-card:hover,
+.formula-card:hover,
+.pyq-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(119, 247, 255, 0.42);
+  box-shadow: 0 28px 70px rgba(39, 216, 255, 0.13);
+}
+
+.chapter-card::after,
+.formula-card::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--blue), var(--purple), var(--pink));
+}
+
+.chapter-card h3,
+.formula-card h3,
+.pyq-card h3 {
+  margin: 12px 0 10px;
+  font-size: 1.25rem;
+}
+
+.chapter-card p,
+.formula-card p,
+.pyq-card p,
+.chapter-detail p,
+.chapter-detail li {
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.chapter-index {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius);
+  color: #04131f;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  font-weight: 900;
+}
+
+.chapter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.chapter-tags span,
+.difficulty-pill {
+  padding: 6px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.045);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.chapter-detail {
+  display: grid;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.chapter-hero-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 24px;
+  align-items: center;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  backdrop-filter: var(--glass);
+}
+
+.diagram-box {
+  min-height: 220px;
+  border: 1px solid rgba(119, 247, 255, 0.22);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.diagram-box svg {
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  display: block;
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.note-panel {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  backdrop-filter: var(--glass);
+}
+
+.note-panel h3 {
+  margin-bottom: 12px;
+}
+
+.note-panel ul,
+.note-panel ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.formula-row {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 13px;
+  border: 1px solid rgba(119, 247, 255, 0.18);
+  border-radius: var(--radius);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.formula-code {
+  color: var(--cyan);
+  font-family: "Space Grotesk", Inter, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.quiz-shell,
+.sim-layout {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  gap: 18px;
+}
+
+.quiz-controls,
+.sim-tabs {
+  position: sticky;
+  top: 98px;
+  align-self: start;
+}
+
+.quiz-controls label,
+.search-box {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 0.83rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+select,
+input {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  outline: 0;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.07);
+  padding: 0 12px;
+}
+
+body.light select,
+body.light input {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.quiz-stat {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--muted);
+}
+
+.quiz-stat strong {
+  color: var(--cyan);
+}
+
+.progress-wrap {
+  margin-top: 14px;
+}
+
+.progress-wrap span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.progress-wrap div {
+  height: 10px;
+  margin-top: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.progress-wrap i {
+  display: block;
+  width: 0%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--blue), var(--purple));
+  transition: width 240ms ease;
+}
+
+.quiz-board {
+  display: grid;
+  gap: 14px;
+}
+
+.quiz-question {
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  backdrop-filter: var(--glass);
+}
+
+.question-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.question-head h3 {
+  font-size: 1.04rem;
+  line-height: 1.45;
+}
+
+.answers-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.formula-card {
+  min-height: 190px;
+}
+
+.formula-card .formula-code {
+  display: block;
+  margin: 12px 0;
+  padding: 14px;
+  border: 1px solid rgba(119, 247, 255, 0.22);
+  border-radius: var(--radius);
+  background: rgba(39, 216, 255, 0.075);
+  word-break: break-word;
+}
+
+.copy-button {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.sim-tabs {
+  display: grid;
+  gap: 10px;
+}
+
+.sim-tabs button {
+  min-height: 46px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--muted);
+  text-align: left;
+  background: rgba(255, 255, 255, 0.055);
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.sim-tabs button.active,
+.sim-tabs button:hover {
+  color: var(--text);
+  border-color: rgba(119, 247, 255, 0.45);
+  background: rgba(39, 216, 255, 0.11);
+}
+
+.sim-panel {
+  padding: 18px;
+}
+
+.sim-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+#simCanvas {
+  width: 100%;
+  aspect-ratio: 15 / 8;
+  display: block;
+  border: 1px solid rgba(119, 247, 255, 0.18);
+  border-radius: var(--radius);
+  background: rgba(1, 6, 19, 0.58);
+}
+
+body.light #simCanvas {
+  background: rgba(230, 244, 255, 0.75);
+}
+
+.sim-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.sim-controls label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.sim-controls input[type="range"] {
+  padding: 0;
+  accent-color: var(--cyan);
+}
+
+.pyq-card {
+  min-height: 260px;
+}
+
+.pyq-card ol {
+  margin: 14px 0 0;
+  padding-left: 20px;
+}
+
+.pyq-card li {
+  margin-bottom: 10px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.scroll-top {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 30;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--text);
+  background: var(--panel-strong);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+
+.scroll-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.scroll-top:hover {
+  transform: translateY(-2px);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@media (max-width: 1040px) {
+  .site-header {
+    flex-wrap: wrap;
+  }
+
+  .main-nav {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    overflow-x: auto;
+  }
+
+  .hero,
+  .chapter-hero-card,
+  .quiz-shell,
+  .sim-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    min-height: auto;
+  }
+
+  .hero-visual {
+    min-height: 420px;
+  }
+
+  .hero-visual canvas {
+    min-height: 420px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .chapter-grid,
+  .formula-grid,
+  .pyq-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .quiz-controls,
+  .sim-tabs {
+    position: static;
+  }
+
+  .sim-tabs {
+    grid-template-columns: repeat(5, minmax(130px, 1fr));
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .site-header {
+    width: min(100% - 20px, var(--max));
+    margin-top: 10px;
+  }
+
+  .nav-toggle {
+    display: grid;
+  }
+
+  .main-nav {
+    display: none;
+    order: 4;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .main-nav.open {
+    display: grid;
+  }
+
+  .main-nav a {
+    text-align: center;
+  }
+
+  .header-actions {
+    margin-left: auto;
+  }
+
+  main {
+    width: min(100% - 20px, var(--max));
+    padding-top: 34px;
+  }
+
+  h1 {
+    font-size: clamp(3.9rem, 21vw, 6rem);
+  }
+
+  .hero-actions,
+  .page-heading,
+  .sim-topline {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .hero-actions a {
+    width: 100%;
+  }
+
+  .hero-visual {
+    min-height: 360px;
+  }
+
+  .hero-visual canvas {
+    min-height: 360px;
+  }
+
+  .equation-chip {
+    font-size: 0.8rem;
+  }
+
+  .stats-strip,
+  .dashboard-grid,
+  .chapter-grid,
+  .formula-grid,
+  .pyq-list,
+  .notes-grid,
+  .answers-grid,
+  .sim-controls {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-strip span {
+    font-size: 1.8rem;
+  }
+
+  .chapter-hero-card {
+    padding: 18px;
+  }
+
+  .qod-card h2 {
+    font-size: 1.35rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="loader" id="loader">
+    <div class="loader-orbit" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+    <p>Charging Phys Rizz</p>
+  </div>
+
+  <canvas id="spaceCanvas" class="space-canvas" aria-hidden="true"></canvas>
+  <div class="page-glow" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Phys Rizz home">
+      <span class="brand-mark">Pr</span>
+      <span>
+        <strong>Phys Rizz</strong>
+        <small>Class 11 Karnataka</small>
+      </span>
+    </a>
+
+    <button class="nav-toggle icon-button" id="navToggle" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="main-nav" id="mainNav" aria-label="Main navigation">
+      <a href="#home">Home</a>
+      <a href="#notes">Notes</a>
+      <a href="#mcqs">MCQs</a>
+      <a href="#formulas">Formula Sheet</a>
+      <a href="#simulations">Simulations</a>
+      <a href="#pyqs">PYQs</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="icon-button" id="soundToggle" aria-label="Toggle sound effects" title="Sound effects">
+        <span class="sound-icon">♪</span>
+      </button>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light mode">
+        <span class="theme-dot"></span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="page active" id="home">
+      <div class="hero">
+        <div class="hero-copy">
+          <div class="eyebrow">Karnataka Board Class 11 Physics</div>
+          <h1>Phys Rizz</h1>
+          <p class="tagline">Master concepts, formulas, MCQs, and board questions with calm confidence and neon focus.</p>
+          <div class="hero-actions">
+            <a class="glow-button" href="#notes">Notes</a>
+            <a class="ghost-button" href="#mcqs">MCQs</a>
+            <a class="ghost-button" href="#formulas">Formula Sheet</a>
+            <a class="ghost-button" href="#pyqs">PYQs</a>
+            <a class="ghost-button" href="#simulations">Simulations</a>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="Animated physics orbit">
+          <canvas id="heroCanvas"></canvas>
+          <div class="equation-chip chip-a">F = ma</div>
+          <div class="equation-chip chip-b">v = f lambda</div>
+          <div class="equation-chip chip-c">PV = nRT</div>
+        </div>
+      </div>
+
+      <section class="stats-strip" aria-label="Study dashboard">
+        <article><span id="mcqCount">90</span><p>Board-style MCQs</p></article>
+        <article><span>15</span><p>Class 11 chapters</p></article>
+        <article><span id="streakCount">0</span><p>Daily streak</p></article>
+        <article><span id="bestScore">0%</span><p>Best quiz score</p></article>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="glass-card qod-card">
+          <div class="section-kicker">Question of the Day</div>
+          <h2 id="qodQuestion">Loading question...</h2>
+          <div class="qod-options" id="qodOptions"></div>
+          <p id="qodResult" class="inline-result"></p>
+        </article>
+        <article class="glass-card quote-card">
+          <div class="section-kicker">Physics Quote</div>
+          <blockquote id="quoteText"></blockquote>
+          <button class="mini-button" id="quoteButton">New Quote</button>
+        </article>
+        <article class="glass-card fact-card">
+          <div class="section-kicker">Physics Fact</div>
+          <p id="factText"></p>
+          <button class="mini-button" id="factButton">Next Fact</button>
+        </article>
+        <article class="glass-card leaderboard-card">
+          <div class="section-kicker">Leaderboard</div>
+          <ol id="leaderboardList"></ol>
+        </article>
+      </section>
+    </section>
+
+    <section class="page" id="notes">
+      <div class="page-heading">
+        <div><div class="eyebrow">Chapter-wise notes</div><h2>Karnataka Board Class 11 Physics Notes</h2></div>
+        <p>Simple explanations, diagrams, formulas, quick revision, and board-focused questions.</p>
+      </div>
+      <div class="chapter-grid" id="chapterGrid"></div>
+    </section>
+
+    <section class="page" id="chapter">
+      <button class="back-button" data-route="#notes">Back to Notes</button>
+      <article class="chapter-detail" id="chapterDetail"></article>
+    </section>
+
+    <section class="page" id="mcqs">
+      <div class="page-heading">
+        <div><div class="eyebrow">Practice arena</div><h2>Chapter-wise MCQ Practice</h2></div>
+        <p>Shuffle questions, choose difficulty, check instantly, and save scores locally.</p>
+      </div>
+      <div class="quiz-shell">
+        <aside class="quiz-controls glass-card">
+          <label>Chapter<select id="quizChapter"></select></label>
+          <label>Difficulty<select id="quizDifficulty"><option value="All">All</option><option value="Easy">Easy</option><option value="Medium">Medium</option><option value="Hard">Hard</option></select></label>
+          <label>Questions<input id="quizLimit" type="number" min="5" max="90" value="15"></label>
+          <button class="glow-button full" id="startQuiz">Start Quiz</button>
+          <button class="ghost-button full" id="shuffleQuiz">Shuffle Again</button>
+          <div class="quiz-stat"><span>Score</span><strong id="scoreCounter">0 / 0</strong></div>
+          <div class="quiz-stat"><span>Timer</span><strong id="timer">00:00</strong></div>
+          <div class="progress-wrap" aria-label="Quiz progress"><span id="progressText">0%</span><div><i id="progressBar"></i></div></div>
+        </aside>
+        <div class="quiz-board" id="quizBoard"></div>
+      </div>
+    </section>
+
+    <section class="page" id="formulas">
+      <div class="page-heading">
+        <div><div class="eyebrow">Formula sheet</div><h2>Chapter-wise Physics Formulas</h2></div>
+        <label class="search-box"><span>Search</span><input id="formulaSearch" type="search" placeholder="Search chapter, formula, or meaning"></label>
+      </div>
+      <div class="formula-grid" id="formulaGrid"></div>
+    </section>
+
+    <section class="page" id="simulations">
+      <div class="page-heading">
+        <div><div class="eyebrow">Interactive lab</div><h2>Physics Simulations</h2></div>
+        <p>Projectile, pendulum, free fall, wave motion, and Newton's laws visualized in real time.</p>
+      </div>
+      <div class="sim-layout">
+        <aside class="sim-tabs glass-card" id="simTabs">
+          <button class="active" data-sim="projectile">Projectile</button>
+          <button data-sim="pendulum">Pendulum</button>
+          <button data-sim="freefall">Free Fall</button>
+          <button data-sim="wave">Wave</button>
+          <button data-sim="newton">Newton's Laws</button>
+        </aside>
+        <section class="sim-panel glass-card">
+          <div class="sim-topline"><h3 id="simTitle">Projectile Motion</h3><button class="mini-button" id="resetSim">Reset</button></div>
+          <canvas id="simCanvas" width="900" height="480"></canvas>
+          <div class="sim-controls" id="simControls"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="page" id="pyqs">
+      <div class="page-heading">
+        <div><div class="eyebrow">Board focus</div><h2>Karnataka Board PYQ Bank</h2></div>
+        <p>Chapter-wise previous-year-style questions for revision and writing practice.</p>
+      </div>
+      <div class="pyq-list" id="pyqList"></div>
+    </section>
+  </main>
+
+  <button class="scroll-top" id="scrollTop" aria-label="Scroll to top">^</button>
+
+  <script>
+// Structured learning data used by the Phys Rizz interface.
+window.PhysRizzData = (() => {
+  const chapters = [
+    {
+      id: "physical-world",
+      title: "Physical World",
+      icon: "atom",
+      summary:
+        "Physics studies nature through observation, measurement, models, and laws. This chapter builds the habit of asking testable questions and connecting discoveries to technology and society.",
+      concepts: ["Scope of physics", "Fundamental forces", "Scientific method", "Physics, technology, and society"],
+      formulas: [
+        { expression: "F_g = G m1 m2 / r^2", meaning: "Gravitational attraction between two masses." },
+        { expression: "F = ma", meaning: "A compact example of a physical law connecting force and motion." },
+        { expression: "E = mc^2", meaning: "Mass-energy equivalence showing matter as stored energy." }
+      ],
+      questions: [
+        "Explain how physics is related to technology with two examples.",
+        "Name the four fundamental forces and arrange them by relative strength.",
+        "Why are models important in physics?"
+      ],
+      revision: ["Physics uses measurement and mathematics to describe nature.", "The four fundamental forces explain most interactions.", "A good theory must agree with experiments."],
+      diagram: "forces"
+    },
+    {
+      id: "units-measurements",
+      title: "Units and Measurements",
+      icon: "ruler",
+      summary:
+        "Measurements become meaningful only when they include a unit and uncertainty. Dimensional analysis helps check equations and convert units quickly.",
+      concepts: ["SI units", "Dimensions", "Errors", "Significant figures"],
+      formulas: [
+        { expression: "Density = mass / volume", meaning: "Dimensional form: [M L^-3]." },
+        { expression: "Percentage error = (absolute error / measured value) x 100", meaning: "Relative size of measurement error." },
+        { expression: "If Z = A^m B^n, dZ/Z = m(dA/A) + n(dB/B)", meaning: "Error propagation rule for powers." }
+      ],
+      questions: [
+        "State the seven SI base quantities and units.",
+        "Use dimensional analysis to check s = ut + (1/2)at^2.",
+        "What are random and systematic errors?"
+      ],
+      revision: ["Always write value plus unit.", "Dimensions can check consistency, not numerical constants.", "Least count affects precision."],
+      diagram: "measurement"
+    },
+    {
+      id: "motion-straight-line",
+      title: "Motion in a Straight Line",
+      icon: "line",
+      summary:
+        "One-dimensional motion describes position, velocity, and acceleration along a straight path. Graphs make the story of motion easy to read.",
+      concepts: ["Displacement", "Average and instantaneous velocity", "Acceleration", "Motion graphs"],
+      formulas: [
+        { expression: "v = u + at", meaning: "Velocity after time t for constant acceleration." },
+        { expression: "s = ut + (1/2)at^2", meaning: "Displacement under uniform acceleration." },
+        { expression: "v^2 = u^2 + 2as", meaning: "Equation without time." }
+      ],
+      questions: [
+        "Derive v = u + at using a velocity-time graph.",
+        "Differentiate between distance and displacement.",
+        "A car starts from rest and accelerates uniformly. Find its displacement in 5 s."
+      ],
+      revision: ["Slope of x-t graph gives velocity.", "Slope of v-t graph gives acceleration.", "Area under v-t graph gives displacement."],
+      diagram: "linear-motion"
+    },
+    {
+      id: "motion-plane",
+      title: "Motion in a Plane",
+      icon: "vector",
+      summary:
+        "Two-dimensional motion needs vectors. Projectile motion is a beautiful example where horizontal and vertical motions happen independently.",
+      concepts: ["Scalars and vectors", "Vector resolution", "Projectile motion", "Uniform circular motion"],
+      formulas: [
+        { expression: "R = u^2 sin(2theta) / g", meaning: "Range of a projectile on level ground." },
+        { expression: "T = 2u sin(theta) / g", meaning: "Time of flight for projectile motion." },
+        { expression: "a_c = v^2 / r", meaning: "Centripetal acceleration in circular motion." }
+      ],
+      questions: [
+        "Resolve a vector into rectangular components.",
+        "Derive the expression for time of flight of a projectile.",
+        "Why is horizontal acceleration zero for ideal projectile motion?"
+      ],
+      revision: ["Treat x and y motions separately.", "Maximum range occurs at 45 degrees.", "Centripetal acceleration points toward the centre."],
+      diagram: "projectile"
+    },
+    {
+      id: "laws-motion",
+      title: "Laws of Motion",
+      icon: "force",
+      summary:
+        "Newton's laws explain how forces change motion. Free-body diagrams are the main tool for solving force problems cleanly.",
+      concepts: ["Inertia", "Newton's laws", "Friction", "Impulse and momentum"],
+      formulas: [
+        { expression: "F_net = ma", meaning: "Net force produces acceleration." },
+        { expression: "p = mv", meaning: "Linear momentum." },
+        { expression: "Impulse = F dt = change in p", meaning: "Impulse equals change in momentum." }
+      ],
+      questions: [
+        "State and explain Newton's three laws of motion.",
+        "Draw the free-body diagram of a block on a rough horizontal surface.",
+        "Why does a passenger move forward when a bus stops suddenly?"
+      ],
+      revision: ["Net force, not one force, decides acceleration.", "Action and reaction act on different bodies.", "Friction opposes relative motion or its tendency."],
+      diagram: "newton"
+    },
+    {
+      id: "work-energy-power",
+      title: "Work, Energy and Power",
+      icon: "energy",
+      summary:
+        "Energy methods often solve motion problems faster than force methods. Work transfers energy, while power tells how fast that transfer happens.",
+      concepts: ["Work", "Kinetic energy", "Potential energy", "Power and conservation"],
+      formulas: [
+        { expression: "W = F s cos(theta)", meaning: "Work done by a constant force." },
+        { expression: "K = (1/2)mv^2", meaning: "Kinetic energy of a moving body." },
+        { expression: "P = W / t = Fv", meaning: "Power as rate of work or force times velocity." }
+      ],
+      questions: [
+        "State the work-energy theorem.",
+        "When is work done by a force zero?",
+        "Explain conservation of mechanical energy with an example."
+      ],
+      revision: ["Work is scalar.", "Energy can change form but total energy is conserved.", "Power is measured in watt."],
+      diagram: "energy"
+    },
+    {
+      id: "rotational-motion",
+      title: "System of Particles and Rotational Motion",
+      icon: "orbit",
+      summary:
+        "Rotational motion is the angular version of linear motion. Centre of mass, torque, and moment of inertia help describe extended bodies.",
+      concepts: ["Centre of mass", "Torque", "Angular momentum", "Moment of inertia"],
+      formulas: [
+        { expression: "tau = rF sin(theta)", meaning: "Torque due to a force." },
+        { expression: "L = I omega", meaning: "Angular momentum of a rigid body." },
+        { expression: "K_rot = (1/2)I omega^2", meaning: "Rotational kinetic energy." }
+      ],
+      questions: [
+        "Define centre of mass and give one practical example.",
+        "State the principle of conservation of angular momentum.",
+        "Why is it easier to open a door by pushing far from the hinge?"
+      ],
+      revision: ["Torque causes angular acceleration.", "Moment of inertia depends on mass distribution.", "Angular momentum is conserved when external torque is zero."],
+      diagram: "rotation"
+    },
+    {
+      id: "gravitation",
+      title: "Gravitation",
+      icon: "planet",
+      summary:
+        "Gravity explains falling objects, satellite motion, tides, and planetary orbits. Newton's law connects every mass in the universe.",
+      concepts: ["Universal gravitation", "Acceleration due to gravity", "Orbital speed", "Escape speed"],
+      formulas: [
+        { expression: "F = G m1 m2 / r^2", meaning: "Newton's universal law of gravitation." },
+        { expression: "g = GM / R^2", meaning: "Acceleration due to gravity near a planet." },
+        { expression: "v_e = sqrt(2GM/R)", meaning: "Escape speed from a planet." }
+      ],
+      questions: [
+        "Derive the relation between g and G.",
+        "Why does the value of g decrease with height?",
+        "What is escape velocity?"
+      ],
+      revision: ["Gravity is always attractive.", "Weight changes with g but mass does not.", "Satellites are continuously falling around Earth."],
+      diagram: "gravity"
+    },
+    {
+      id: "solids",
+      title: "Mechanical Properties of Solids",
+      icon: "solid",
+      summary:
+        "Solids deform under external forces. Elasticity measures how well a body returns to its original shape after the force is removed.",
+      concepts: ["Stress", "Strain", "Hooke's law", "Elastic moduli"],
+      formulas: [
+        { expression: "Stress = force / area", meaning: "Internal restoring force per unit area." },
+        { expression: "Strain = change in length / original length", meaning: "Fractional deformation." },
+        { expression: "Y = stress / strain", meaning: "Young's modulus." }
+      ],
+      questions: [
+        "State Hooke's law and its limitation.",
+        "Define Young's modulus, bulk modulus, and shear modulus.",
+        "Why are bridges designed with safety factors?"
+      ],
+      revision: ["Stress and pressure share units but differ in context.", "Strain has no unit.", "Elastic limit is the boundary for reversible deformation."],
+      diagram: "solid"
+    },
+    {
+      id: "fluids",
+      title: "Mechanical Properties of Fluids",
+      icon: "fluid",
+      summary:
+        "Fluids flow and exert pressure. Concepts like viscosity, surface tension, and Bernoulli's principle explain everyday fluid behavior.",
+      concepts: ["Pressure", "Pascal's law", "Viscosity", "Bernoulli's principle"],
+      formulas: [
+        { expression: "P = F / A", meaning: "Pressure exerted by a normal force." },
+        { expression: "P = rho g h", meaning: "Hydrostatic pressure at depth h." },
+        { expression: "P + (1/2)rho v^2 + rho gh = constant", meaning: "Bernoulli equation for ideal flow." }
+      ],
+      questions: [
+        "State Pascal's law and mention one application.",
+        "Explain surface tension using molecular forces.",
+        "What is terminal velocity?"
+      ],
+      revision: ["Pressure in a fluid acts in all directions.", "Fast-moving fluid has lower pressure in ideal flow.", "Viscosity is internal friction of fluids."],
+      diagram: "fluid"
+    },
+    {
+      id: "thermal-properties",
+      title: "Thermal Properties of Matter",
+      icon: "thermo",
+      summary:
+        "Heat changes temperature, size, or state of matter. This chapter connects thermal expansion, calorimetry, and heat transfer.",
+      concepts: ["Temperature", "Thermal expansion", "Specific heat", "Heat transfer"],
+      formulas: [
+        { expression: "Q = mc DeltaT", meaning: "Heat required for temperature change." },
+        { expression: "DeltaL = alpha L DeltaT", meaning: "Linear expansion of a solid." },
+        { expression: "Q = mL", meaning: "Heat involved in change of state." }
+      ],
+      questions: [
+        "Define specific heat capacity.",
+        "Why are gaps left in railway tracks?",
+        "Compare conduction, convection, and radiation."
+      ],
+      revision: ["Temperature measures hotness; heat is energy in transit.", "Latent heat changes state without changing temperature.", "Black surfaces absorb and emit radiation well."],
+      diagram: "thermal"
+    },
+    {
+      id: "thermodynamics",
+      title: "Thermodynamics",
+      icon: "engine",
+      summary:
+        "Thermodynamics studies heat, work, and internal energy in macroscopic systems. It explains engines, refrigerators, and natural limits of energy conversion.",
+      concepts: ["Thermodynamic system", "First law", "Processes", "Heat engines"],
+      formulas: [
+        { expression: "DeltaU = Q - W", meaning: "First law with W as work done by the system." },
+        { expression: "PV = nRT", meaning: "Ideal gas equation." },
+        { expression: "Efficiency = W / Q_in", meaning: "Thermal efficiency of a heat engine." }
+      ],
+      questions: [
+        "State the first law of thermodynamics.",
+        "Explain isothermal and adiabatic processes.",
+        "Why can no heat engine be 100 percent efficient?"
+      ],
+      revision: ["Internal energy is a state function.", "Heat and work depend on path.", "Second law gives direction to thermal processes."],
+      diagram: "engine"
+    },
+    {
+      id: "kinetic-theory",
+      title: "Kinetic Theory",
+      icon: "gas",
+      summary:
+        "Kinetic theory explains gas pressure and temperature using molecular motion. Macroscopic gas laws emerge from microscopic collisions.",
+      concepts: ["Molecular model", "Pressure of gas", "RMS speed", "Degrees of freedom"],
+      formulas: [
+        { expression: "PV = (1/3)Nm v_rms^2", meaning: "Pressure from molecular motion." },
+        { expression: "K_avg = (3/2)kT", meaning: "Average translational kinetic energy." },
+        { expression: "v_rms = sqrt(3RT/M)", meaning: "Root mean square speed." }
+      ],
+      questions: [
+        "List the assumptions of kinetic theory of gases.",
+        "Explain why gas pressure increases with temperature at constant volume.",
+        "State the law of equipartition of energy."
+      ],
+      revision: ["Temperature is proportional to average kinetic energy.", "Ideal gas molecules have negligible size.", "Collisions are assumed perfectly elastic."],
+      diagram: "gas"
+    },
+    {
+      id: "oscillations",
+      title: "Oscillations",
+      icon: "wave",
+      summary:
+        "Oscillations are repeated to-and-fro motions about equilibrium. Simple harmonic motion appears in springs, pendulums, and many waves.",
+      concepts: ["Periodic motion", "SHM", "Phase", "Energy in SHM"],
+      formulas: [
+        { expression: "x = A sin(omega t + phi)", meaning: "Displacement in SHM." },
+        { expression: "T = 2pi sqrt(m/k)", meaning: "Time period of a spring-mass oscillator." },
+        { expression: "T = 2pi sqrt(l/g)", meaning: "Time period of a simple pendulum for small oscillations." }
+      ],
+      questions: [
+        "Define amplitude, period, frequency, and phase.",
+        "Derive the time period of a simple pendulum for small angle motion.",
+        "How does energy change form during SHM?"
+      ],
+      revision: ["Restoring force in SHM is proportional to displacement.", "Acceleration is maximum at extreme positions.", "Speed is maximum at mean position."],
+      diagram: "pendulum"
+    },
+    {
+      id: "waves",
+      title: "Waves",
+      icon: "sine",
+      summary:
+        "Waves transfer energy without transporting matter permanently. Sound, strings, and water waves show reflection, superposition, and resonance.",
+      concepts: ["Wave motion", "Transverse and longitudinal waves", "Superposition", "Doppler effect"],
+      formulas: [
+        { expression: "v = f lambda", meaning: "Wave speed relation." },
+        { expression: "y = A sin(kx - omega t)", meaning: "Equation of a progressive wave." },
+        { expression: "f' = f(v +/- v_o)/(v -/+ v_s)", meaning: "Doppler effect in sound." }
+      ],
+      questions: [
+        "Differentiate between transverse and longitudinal waves.",
+        "State the principle of superposition.",
+        "Explain beats and write the expression for beat frequency."
+      ],
+      revision: ["Wave speed depends on medium.", "Interference is due to superposition.", "Standing waves form when two similar opposite waves overlap."],
+      diagram: "waves"
+    }
+  ];
+
+  const mcqs = [
+    { c: "physical-world", d: "Easy", q: "Which branch of science studies matter, energy, and their interactions?", o: ["Botany", "Physics", "Zoology", "History"], a: 1 },
+    { c: "physical-world", d: "Easy", q: "Which is the weakest fundamental force?", o: ["Strong nuclear", "Electromagnetic", "Gravitational", "Weak nuclear"], a: 2 },
+    { c: "physical-world", d: "Medium", q: "A scientific theory is accepted mainly because it", o: ["Sounds simple", "Matches repeated experiments", "Is very old", "Uses many symbols"], a: 1 },
+    { c: "physical-world", d: "Medium", q: "The force responsible for binding protons and neutrons in a nucleus is", o: ["Gravitational", "Strong nuclear", "Frictional", "Electrostatic only"], a: 1 },
+    { c: "physical-world", d: "Hard", q: "Which interaction has infinite range and can be attractive or repulsive?", o: ["Strong nuclear", "Weak nuclear", "Electromagnetic", "Contact force"], a: 2 },
+    { c: "physical-world", d: "Hard", q: "A model in physics is useful when it", o: ["Ignores observations", "Explains and predicts within limits", "Never changes", "Avoids mathematics"], a: 1 },
+
+    { c: "units-measurements", d: "Easy", q: "The SI unit of length is", o: ["centimetre", "metre", "kilometre", "inch"], a: 1 },
+    { c: "units-measurements", d: "Easy", q: "Dimensional formula of velocity is", o: ["[LT^-1]", "[L^2T]", "[MLT^-2]", "[T/L]"], a: 0 },
+    { c: "units-measurements", d: "Medium", q: "The number of significant figures in 0.00450 is", o: ["2", "3", "4", "5"], a: 1 },
+    { c: "units-measurements", d: "Medium", q: "Which method is used to measure very small lengths like atomic size?", o: ["Parallax method", "Screw gauge only", "Electron microscope or diffraction method", "Stopwatch"], a: 2 },
+    { c: "units-measurements", d: "Hard", q: "If force has dimensions [MLT^-2], the dimensions of work are", o: ["[MLT^-2]", "[ML^2T^-2]", "[M^2LT^-2]", "[ML^-1T^-2]"], a: 1 },
+    { c: "units-measurements", d: "Hard", q: "If Z = A^2/B, the fractional error in Z is", o: ["2 dA/A + dB/B", "dA/A - dB/B", "2 dA/A - dB/B", "dA/A + 2 dB/B"], a: 0 },
+
+    { c: "motion-straight-line", d: "Easy", q: "The slope of a displacement-time graph gives", o: ["Acceleration", "Velocity", "Force", "Work"], a: 1 },
+    { c: "motion-straight-line", d: "Easy", q: "A body moving with uniform velocity has acceleration", o: ["constant non-zero", "zero", "infinite", "variable"], a: 1 },
+    { c: "motion-straight-line", d: "Medium", q: "For a body starting from rest, s = 20 m in 4 s. Its uniform acceleration is", o: ["1.5 m/s^2", "2.5 m/s^2", "5 m/s^2", "10 m/s^2"], a: 1 },
+    { c: "motion-straight-line", d: "Medium", q: "Area under a velocity-time graph represents", o: ["Speed", "Displacement", "Acceleration", "Power"], a: 1 },
+    { c: "motion-straight-line", d: "Hard", q: "A ball is thrown vertically upward. At the highest point its", o: ["velocity and acceleration are zero", "velocity is zero but acceleration is g downward", "velocity is maximum", "acceleration is upward"], a: 1 },
+    { c: "motion-straight-line", d: "Hard", q: "Which equation is independent of time?", o: ["v = u + at", "s = ut + (1/2)at^2", "v^2 = u^2 + 2as", "s = average velocity x time"], a: 2 },
+
+    { c: "motion-plane", d: "Easy", q: "A vector has", o: ["magnitude only", "direction only", "both magnitude and direction", "neither magnitude nor direction"], a: 2 },
+    { c: "motion-plane", d: "Easy", q: "Horizontal acceleration in ideal projectile motion is", o: ["g", "zero", "u", "2g"], a: 1 },
+    { c: "motion-plane", d: "Medium", q: "Maximum range of a projectile on level ground occurs at angle", o: ["30 degree", "45 degree", "60 degree", "90 degree"], a: 1 },
+    { c: "motion-plane", d: "Medium", q: "Centripetal acceleration is directed", o: ["tangentially", "away from centre", "towards centre", "opposite velocity always"], a: 2 },
+    { c: "motion-plane", d: "Hard", q: "For a projectile, the vertical component of velocity at maximum height is", o: ["u", "u cos theta", "zero", "gT"], a: 2 },
+    { c: "motion-plane", d: "Hard", q: "If speed is doubled in uniform circular motion with same radius, centripetal acceleration becomes", o: ["double", "half", "four times", "unchanged"], a: 2 },
+
+    { c: "laws-motion", d: "Easy", q: "Newton's first law is also called the law of", o: ["energy", "inertia", "gravitation", "heat"], a: 1 },
+    { c: "laws-motion", d: "Easy", q: "The SI unit of force is", o: ["joule", "newton", "watt", "pascal"], a: 1 },
+    { c: "laws-motion", d: "Medium", q: "Action and reaction forces act on", o: ["same body", "different bodies", "only at rest", "only fluids"], a: 1 },
+    { c: "laws-motion", d: "Medium", q: "Impulse is equal to change in", o: ["energy", "momentum", "power", "displacement"], a: 1 },
+    { c: "laws-motion", d: "Hard", q: "A 2 kg body accelerates at 3 m/s^2. Net force is", o: ["1.5 N", "5 N", "6 N", "9 N"], a: 2 },
+    { c: "laws-motion", d: "Hard", q: "Limiting friction is proportional to", o: ["area only", "normal reaction", "velocity", "temperature only"], a: 1 },
+
+    { c: "work-energy-power", d: "Easy", q: "Work done is zero when force and displacement are", o: ["parallel", "opposite", "perpendicular", "same direction"], a: 2 },
+    { c: "work-energy-power", d: "Easy", q: "The SI unit of power is", o: ["joule", "newton", "watt", "tesla"], a: 2 },
+    { c: "work-energy-power", d: "Medium", q: "Kinetic energy of a body of mass m and speed v is", o: ["mv", "mgh", "(1/2)mv^2", "Fv"], a: 2 },
+    { c: "work-energy-power", d: "Medium", q: "Work-energy theorem says work done by net force equals change in", o: ["potential energy", "kinetic energy", "power", "mass"], a: 1 },
+    { c: "work-energy-power", d: "Hard", q: "If speed of a body becomes three times, kinetic energy becomes", o: ["3 times", "6 times", "9 times", "unchanged"], a: 2 },
+    { c: "work-energy-power", d: "Hard", q: "For a freely falling body without air resistance, total mechanical energy", o: ["increases", "decreases", "remains constant", "becomes zero"], a: 2 },
+
+    { c: "rotational-motion", d: "Easy", q: "The rotational analogue of force is", o: ["torque", "mass", "velocity", "work"], a: 0 },
+    { c: "rotational-motion", d: "Easy", q: "Angular velocity is measured in", o: ["m/s", "rad/s", "N", "J"], a: 1 },
+    { c: "rotational-motion", d: "Medium", q: "Moment of inertia depends on", o: ["mass distribution", "colour", "temperature only", "electric charge only"], a: 0 },
+    { c: "rotational-motion", d: "Medium", q: "A dancer folds arms while spinning. Angular speed", o: ["decreases", "increases", "becomes zero", "does not change"], a: 1 },
+    { c: "rotational-motion", d: "Hard", q: "Torque is maximum when angle between r and F is", o: ["0 degree", "30 degree", "90 degree", "180 degree"], a: 2 },
+    { c: "rotational-motion", d: "Hard", q: "Rotational kinetic energy is", o: ["(1/2)I omega^2", "I omega", "mgh", "tau/r"], a: 0 },
+
+    { c: "gravitation", d: "Easy", q: "Gravity between two masses is always", o: ["repulsive", "attractive", "zero", "magnetic"], a: 1 },
+    { c: "gravitation", d: "Easy", q: "The value of g near Earth's surface is about", o: ["9.8 m/s^2", "3 m/s^2", "98 m/s^2", "0.98 m/s^2"], a: 0 },
+    { c: "gravitation", d: "Medium", q: "If distance between two masses doubles, gravitational force becomes", o: ["double", "half", "one-fourth", "four times"], a: 2 },
+    { c: "gravitation", d: "Medium", q: "Escape velocity from Earth does not depend on the object's", o: ["mass", "Earth radius", "G", "Earth mass"], a: 0 },
+    { c: "gravitation", d: "Hard", q: "Orbital speed of a satellite close to Earth is approximately", o: ["1 km/s", "8 km/s", "80 km/s", "0.8 km/s"], a: 1 },
+    { c: "gravitation", d: "Hard", q: "At the centre of Earth, ideal value of g is", o: ["maximum", "zero", "9.8 m/s^2", "infinite"], a: 1 },
+
+    { c: "solids", d: "Easy", q: "Strain has", o: ["unit N", "unit Pa", "no unit", "unit J"], a: 2 },
+    { c: "solids", d: "Easy", q: "Stress is defined as", o: ["force x area", "force / area", "area / force", "mass / volume"], a: 1 },
+    { c: "solids", d: "Medium", q: "Hooke's law is valid up to", o: ["breaking point", "elastic limit", "plastic region", "melting point"], a: 1 },
+    { c: "solids", d: "Medium", q: "Young's modulus relates tensile stress to", o: ["volume strain", "shear strain", "longitudinal strain", "temperature"], a: 2 },
+    { c: "solids", d: "Hard", q: "A material with high Young's modulus is", o: ["more elastic in engineering sense", "always liquid", "less stiff", "not deformable at all"], a: 0 },
+    { c: "solids", d: "Hard", q: "Elastic potential energy stored in a stretched wire depends on", o: ["only colour", "stress and strain", "only pressure", "only density"], a: 1 },
+
+    { c: "fluids", d: "Easy", q: "Pressure in a fluid at rest increases with", o: ["height above surface", "depth", "colour", "container mass only"], a: 1 },
+    { c: "fluids", d: "Easy", q: "SI unit of pressure is", o: ["pascal", "joule", "watt", "newton metre"], a: 0 },
+    { c: "fluids", d: "Medium", q: "Pascal's law is used in", o: ["hydraulic lift", "simple pendulum", "electric motor", "telescope"], a: 0 },
+    { c: "fluids", d: "Medium", q: "Viscosity is the fluid's", o: ["electric charge", "internal friction", "mass defect", "magnetic strength"], a: 1 },
+    { c: "fluids", d: "Hard", q: "According to Bernoulli's principle, where speed is high, pressure is", o: ["high", "low", "unchanged always", "infinite"], a: 1 },
+    { c: "fluids", d: "Hard", q: "Terminal velocity is reached when net force on falling body becomes", o: ["maximum", "zero", "equal to weight upward", "infinite"], a: 1 },
+
+    { c: "thermal-properties", d: "Easy", q: "Heat is a form of", o: ["energy", "mass", "length", "charge"], a: 0 },
+    { c: "thermal-properties", d: "Easy", q: "Specific heat capacity has unit", o: ["J kg^-1 K^-1", "N m^-2", "m s^-1", "kg m^-3"], a: 0 },
+    { c: "thermal-properties", d: "Medium", q: "During change of state, temperature", o: ["always rises", "always falls", "remains constant", "becomes infinite"], a: 2 },
+    { c: "thermal-properties", d: "Medium", q: "Gaps are left in railway tracks to allow", o: ["thermal expansion", "reflection", "viscosity", "magnetism"], a: 0 },
+    { c: "thermal-properties", d: "Hard", q: "The mode of heat transfer that needs no medium is", o: ["conduction", "convection", "radiation", "diffusion"], a: 2 },
+    { c: "thermal-properties", d: "Hard", q: "For same heat supplied, temperature rise is smaller when heat capacity is", o: ["larger", "smaller", "zero", "negative"], a: 0 },
+
+    { c: "thermodynamics", d: "Easy", q: "The first law of thermodynamics is based on conservation of", o: ["charge", "energy", "momentum only", "mass only"], a: 1 },
+    { c: "thermodynamics", d: "Easy", q: "Ideal gas equation is", o: ["PV = nRT", "F = ma", "v = u + at", "P = F/A"], a: 0 },
+    { c: "thermodynamics", d: "Medium", q: "In an isothermal process, temperature is", o: ["constant", "zero", "increasing always", "decreasing always"], a: 0 },
+    { c: "thermodynamics", d: "Medium", q: "In an adiabatic process, heat exchange is", o: ["maximum", "zero", "equal to work always", "infinite"], a: 1 },
+    { c: "thermodynamics", d: "Hard", q: "A heat engine cannot have 100 percent efficiency because of", o: ["Newton's first law", "second law of thermodynamics", "Ohm's law", "Hooke's law"], a: 1 },
+    { c: "thermodynamics", d: "Hard", q: "For work done by system W, first law is commonly written as", o: ["DeltaU = Q - W", "DeltaU = Q + W", "Q = DeltaU - W", "W = DeltaU + Q"], a: 0 },
+
+    { c: "kinetic-theory", d: "Easy", q: "Gas pressure is due to molecular", o: ["collisions with walls", "colour", "shape", "rest position"], a: 0 },
+    { c: "kinetic-theory", d: "Easy", q: "Average kinetic energy of gas molecules depends on", o: ["temperature", "container colour", "shape of vessel only", "altitude only"], a: 0 },
+    { c: "kinetic-theory", d: "Medium", q: "For an ideal gas, collisions are assumed to be", o: ["perfectly elastic", "perfectly inelastic", "absent", "magnetic"], a: 0 },
+    { c: "kinetic-theory", d: "Medium", q: "RMS speed is proportional to square root of", o: ["temperature", "pressure only", "volume only", "density only"], a: 0 },
+    { c: "kinetic-theory", d: "Hard", q: "At same temperature, lighter gas molecules have", o: ["lower rms speed", "higher rms speed", "zero rms speed", "same mass"], a: 1 },
+    { c: "kinetic-theory", d: "Hard", q: "The average translational kinetic energy of a molecule is", o: ["(1/2)kT", "(3/2)kT", "3k/T", "PV"], a: 1 },
+
+    { c: "oscillations", d: "Easy", q: "Motion repeated at equal intervals of time is", o: ["random motion", "periodic motion", "linear motion only", "projectile motion"], a: 1 },
+    { c: "oscillations", d: "Easy", q: "In SHM, restoring force is proportional to", o: ["velocity", "displacement", "mass only", "time squared"], a: 1 },
+    { c: "oscillations", d: "Medium", q: "For a simple pendulum, time period depends mainly on", o: ["mass of bob", "length and g", "colour", "amplitude at large angle only"], a: 1 },
+    { c: "oscillations", d: "Medium", q: "At mean position in SHM, speed is", o: ["maximum", "zero", "minimum", "undefined"], a: 0 },
+    { c: "oscillations", d: "Hard", q: "If spring constant becomes four times, time period of spring-mass system becomes", o: ["double", "half", "four times", "unchanged"], a: 1 },
+    { c: "oscillations", d: "Hard", q: "Acceleration in SHM is maximum at", o: ["mean position", "extreme positions", "all points equally", "only after one period"], a: 1 },
+
+    { c: "waves", d: "Easy", q: "Wave speed is given by", o: ["v = f lambda", "v = m/a", "v = F/A", "v = q/t"], a: 0 },
+    { c: "waves", d: "Easy", q: "Sound waves in air are", o: ["transverse", "longitudinal", "electromagnetic", "stationary only"], a: 1 },
+    { c: "waves", d: "Medium", q: "The distance between two consecutive crests is", o: ["amplitude", "wavelength", "frequency", "phase"], a: 1 },
+    { c: "waves", d: "Medium", q: "Beats are produced by two waves with", o: ["slightly different frequencies", "same amplitude only", "zero frequency", "no superposition"], a: 0 },
+    { c: "waves", d: "Hard", q: "In a standing wave, points that remain at rest are called", o: ["antinodes", "nodes", "crests", "troughs"], a: 1 },
+    { c: "waves", d: "Hard", q: "Doppler effect is the apparent change in", o: ["frequency due to relative motion", "mass due to heat", "pressure due to depth", "length due to stress"], a: 0 }
+  ];
+
+  const facts = [
+    "A satellite in orbit is in continuous free fall around Earth.",
+    "The blue sky comes from scattering of shorter wavelengths of sunlight.",
+    "A body can have zero velocity and non-zero acceleration at the same instant.",
+    "Sound travels faster in solids than in gases because solids are usually more elastic.",
+    "The SI system makes physics portable across classrooms, labs, and countries.",
+    "Resonance can make small periodic pushes produce very large oscillations.",
+    "Energy is never destroyed; it changes form or moves from one system to another."
+  ];
+
+  const quotes = [
+    "Small daily revision beats last-minute panic.",
+    "Every formula becomes friendly after one good diagram.",
+    "Your notebook is a launchpad, not a museum.",
+    "Physics rewards the student who asks: what is the system?",
+    "Solve slowly, learn deeply, score calmly.",
+    "Graphs are stories written in axes."
+  ];
+
+  return { chapters, mcqs, facts, quotes };
+})();
+
+  </script>
+  <script>
+// Phys Rizz app logic: routing, rendering, quiz engine, storage, and simulations.
+(() => {
+  const data = window.PhysRizzData;
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+  const store = {
+    get(key, fallback) {
+      try {
+        return JSON.parse(localStorage.getItem(key)) ?? fallback;
+      } catch {
+        return fallback;
+      }
+    },
+    set(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+  };
+
+  const state = {
+    route: "home",
+    chapterId: data.chapters[0].id,
+    quiz: { questions: [], answered: new Map(), score: 0, startedAt: null, timerId: null },
+    sound: store.get("physRizzSound", true),
+    sim: "projectile",
+    simTime: 0,
+    simValues: {
+      projectile: { speed: 56, angle: 42, gravity: 9.8 },
+      pendulum: { length: 180, angle: 32, gravity: 9.8 },
+      freefall: { height: 280, gravity: 9.8, mass: 2 },
+      wave: { amplitude: 58, frequency: 2, wavelength: 170 },
+      newton: { force: 42, mass: 6, friction: 8 }
+    }
+  };
+
+  const chapterById = new Map(data.chapters.map((chapter) => [chapter.id, chapter]));
+
+  document.addEventListener("DOMContentLoaded", init);
+
+  function init() {
+    $("#mcqCount").textContent = data.mcqs.length;
+    initTheme();
+    initSound();
+    initNavigation();
+    renderChapters();
+    renderFormulas();
+    renderPyqs();
+    setupQuiz();
+    setupSmartCards();
+    setupSimulations();
+    setupScrollTop();
+    initCanvases();
+    routeFromHash();
+
+    setTimeout(() => $("#loader").classList.add("hidden"), 650);
+  }
+
+  function initTheme() {
+    const savedTheme = store.get("physRizzTheme", "dark");
+    document.body.classList.toggle("light", savedTheme === "light");
+    $("#themeToggle").addEventListener("click", () => {
+      const light = document.body.classList.toggle("light");
+      store.set("physRizzTheme", light ? "light" : "dark");
+      ping(600, 0.035);
+    });
+  }
+
+  function initSound() {
+    $("#soundToggle").classList.toggle("muted", !state.sound);
+    $("#soundToggle").addEventListener("click", () => {
+      state.sound = !state.sound;
+      store.set("physRizzSound", state.sound);
+      $("#soundToggle").classList.toggle("muted", !state.sound);
+      $(".sound-icon").textContent = state.sound ? "♪" : "x";
+      ping(520, 0.03);
+    });
+    $(".sound-icon").textContent = state.sound ? "♪" : "x";
+  }
+
+  function ping(frequency = 740, volume = 0.025) {
+    if (!state.sound) return;
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    const context = new AudioContext();
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    oscillator.type = "sine";
+    oscillator.frequency.value = frequency;
+    gain.gain.value = volume;
+    oscillator.connect(gain);
+    gain.connect(context.destination);
+    oscillator.start();
+    gain.gain.exponentialRampToValueAtTime(0.0001, context.currentTime + 0.12);
+    oscillator.stop(context.currentTime + 0.13);
+  }
+
+  function initNavigation() {
+    $("#navToggle").addEventListener("click", () => {
+      const nav = $("#mainNav");
+      const open = nav.classList.toggle("open");
+      $("#navToggle").setAttribute("aria-expanded", String(open));
+    });
+
+    $$("#mainNav a").forEach((link) => {
+      link.addEventListener("click", () => $("#mainNav").classList.remove("open"));
+    });
+
+    document.addEventListener("click", (event) => {
+      const routeButton = event.target.closest("[data-route]");
+      if (routeButton) {
+        location.hash = routeButton.dataset.route;
+      }
+    });
+
+    window.addEventListener("hashchange", routeFromHash);
+  }
+
+  function routeFromHash() {
+    const hash = location.hash.replace(/^#/, "") || "home";
+    const [route, chapterId] = hash.split("/");
+    state.route = route;
+    if (chapterId && chapterById.has(chapterId)) {
+      state.chapterId = chapterId;
+      renderChapterDetail(chapterId);
+    }
+
+    $$(".page").forEach((page) => page.classList.remove("active"));
+    const target = route === "chapter" ? $("#chapter") : $(`#${route}`);
+    (target || $("#home")).classList.add("active");
+
+    $$("#mainNav a").forEach((link) => {
+      const navRoute = link.getAttribute("href").replace("#", "");
+      link.classList.toggle("active", navRoute === route || (route === "chapter" && navRoute === "notes"));
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function renderChapters() {
+    $("#chapterGrid").innerHTML = data.chapters
+      .map((chapter, index) => `
+        <a class="chapter-card" href="#chapter/${chapter.id}">
+          <span class="chapter-index">${String(index + 1).padStart(2, "0")}</span>
+          <h3>${chapter.title}</h3>
+          <p>${chapter.summary}</p>
+          <div class="chapter-tags">
+            ${chapter.concepts.slice(0, 3).map((concept) => `<span>${concept}</span>`).join("")}
+          </div>
+        </a>
+      `)
+      .join("");
+  }
+
+  function renderChapterDetail(chapterId) {
+    const chapter = chapterById.get(chapterId) || data.chapters[0];
+    $("#chapterDetail").innerHTML = `
+      <section class="chapter-hero-card">
+        <div>
+          <div class="eyebrow">Chapter notes</div>
+          <h2>${chapter.title}</h2>
+          <p>${chapter.summary}</p>
+        </div>
+        <div class="diagram-box">${diagramSvg(chapter.diagram, chapter.title)}</div>
+      </section>
+      <section class="notes-grid">
+        ${notePanel("Key Concepts", list(chapter.concepts))}
+        ${notePanel("Important Formulas", chapter.formulas.map((formula) => `
+          <div class="formula-row">
+            <span class="formula-code">${formula.expression}</span>
+            <span>${formula.meaning}</span>
+          </div>
+        `).join(""))}
+        ${notePanel("Karnataka Board Important Questions", ordered(chapter.questions))}
+        ${notePanel("Quick Revision Notes", list(chapter.revision))}
+      </section>
+    `;
+  }
+
+  function notePanel(title, body) {
+    return `<article class="note-panel"><h3>${title}</h3>${body}</article>`;
+  }
+
+  function list(items) {
+    return `<ul>${items.map((item) => `<li>${item}</li>`).join("")}</ul>`;
+  }
+
+  function ordered(items) {
+    return `<ol>${items.map((item) => `<li>${item}</li>`).join("")}</ol>`;
+  }
+
+  function diagramSvg(type, title) {
+    const common = `
+      <defs>
+        <linearGradient id="g" x1="0" x2="1">
+          <stop offset="0" stop-color="#27d8ff"/>
+          <stop offset="1" stop-color="#a855f7"/>
+        </linearGradient>
+        <filter id="glow"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      </defs>
+      <rect width="100%" height="100%" fill="rgba(4,8,22,0.4)"/>
+      <text x="24" y="34" fill="#77f7ff" font-size="15" font-family="Inter" font-weight="800">${title}</text>`;
+    const diagrams = {
+      projectile: `<path d="M40 178 Q170 38 315 178" fill="none" stroke="url(#g)" stroke-width="4" filter="url(#glow)"/><line x1="34" y1="180" x2="330" y2="180" stroke="#8ebeff55"/><circle cx="170" cy="76" r="10" fill="#77f7ff" filter="url(#glow)"/><text x="150" y="210" fill="#9fb0d0" font-size="13">range</text>`,
+      pendulum: `<line x1="180" y1="54" x2="238" y2="172" stroke="url(#g)" stroke-width="4" filter="url(#glow)"/><circle cx="238" cy="172" r="24" fill="#a855f7" filter="url(#glow)"/><path d="M122 54 A70 70 0 0 0 238 172" fill="none" stroke="#77f7ff66" stroke-dasharray="6 8"/><text x="246" y="112" fill="#9fb0d0" font-size="13">theta</text>`,
+      waves: `<path d="M24 150 C64 72 104 72 144 150 S224 228 264 150 S344 72 384 150" fill="none" stroke="url(#g)" stroke-width="4" filter="url(#glow)"/><line x1="24" y1="150" x2="384" y2="150" stroke="#8ebeff55"/><text x="154" y="88" fill="#9fb0d0" font-size="13">lambda</text>`,
+      linear: `<line x1="48" y1="184" x2="340" y2="184" stroke="#8ebeff88"/><line x1="48" y1="184" x2="48" y2="54" stroke="#8ebeff88"/><path d="M58 168 L132 132 L214 92 L320 62" stroke="url(#g)" stroke-width="4" fill="none" filter="url(#glow)"/><text x="302" y="204" fill="#9fb0d0" font-size="13">time</text>`,
+      newton: `<rect x="138" y="116" width="92" height="58" rx="8" fill="#142342" stroke="#77f7ff"/><line x1="230" y1="145" x2="328" y2="145" stroke="url(#g)" stroke-width="5" marker-end="url(#arrow)" filter="url(#glow)"/><line x1="138" y1="145" x2="70" y2="145" stroke="#ff4fe3" stroke-width="4"/><text x="250" y="128" fill="#77f7ff" font-size="13">F</text><text x="76" y="128" fill="#ff9dec" font-size="13">friction</text>`,
+      rotation: `<circle cx="184" cy="142" r="76" fill="none" stroke="url(#g)" stroke-width="4" filter="url(#glow)"/><line x1="184" y1="142" x2="260" y2="142" stroke="#77f7ff" stroke-width="3"/><circle cx="184" cy="142" r="8" fill="#77f7ff"/><path d="M270 110 A70 70 0 0 1 274 172" fill="none" stroke="#ff4fe3" stroke-width="4"/><text x="214" y="134" fill="#9fb0d0" font-size="13">r</text>`,
+      gravity: `<circle cx="176" cy="146" r="60" fill="#1f3a70" stroke="#77f7ff" filter="url(#glow)"/><circle cx="285" cy="80" r="18" fill="#a855f7"/><path d="M285 80 C245 78 208 100 176 146" fill="none" stroke="#8ebeff88" stroke-dasharray="5 7"/><text x="245" y="122" fill="#9fb0d0" font-size="13">orbit</text>`,
+      fluid: `<path d="M50 84 H330 V186 Q240 204 150 186 T50 186 Z" fill="#27d8ff2a" stroke="#77f7ff"/><path d="M50 118 C100 96 144 138 194 118 S286 96 330 118" fill="none" stroke="url(#g)" stroke-width="4"/><text x="144" y="166" fill="#9fb0d0" font-size="13">pressure = rho g h</text>`,
+      thermal: `<rect x="88" y="92" width="198" height="52" rx="8" fill="#142342" stroke="#77f7ff"/><path d="M88 170 H318" stroke="url(#g)" stroke-width="6" filter="url(#glow)"/><path d="M126 64 V38 M184 64 V30 M242 64 V38" stroke="#ff4fe3" stroke-width="4"/><text x="122" y="202" fill="#9fb0d0" font-size="13">thermal expansion</text>`,
+      engine: `<rect x="74" y="96" width="104" height="78" rx="8" fill="#142342" stroke="#77f7ff"/><rect x="230" y="96" width="92" height="78" rx="8" fill="#24163c" stroke="#a855f7"/><path d="M178 135 H230" stroke="url(#g)" stroke-width="5"/><text x="92" y="86" fill="#77f7ff" font-size="13">hot</text><text x="246" y="86" fill="#caa8ff" font-size="13">cold</text><text x="180" y="124" fill="#9fb0d0" font-size="13">work</text>`,
+      gas: `<rect x="74" y="72" width="238" height="132" rx="8" fill="#14234244" stroke="#77f7ff"/><circle cx="118" cy="112" r="8" fill="#77f7ff"/><circle cx="190" cy="148" r="8" fill="#a855f7"/><circle cx="260" cy="105" r="8" fill="#ff4fe3"/><path d="M118 112 L170 86 M190 148 L244 176 M260 105 L292 132" stroke="#8ebeff88"/><text x="118" y="226" fill="#9fb0d0" font-size="13">molecular motion</text>`,
+      solid: `<rect x="94" y="116" width="180" height="54" rx="6" fill="#142342" stroke="#77f7ff"/><path d="M72 143 H28 M274 143 H340" stroke="url(#g)" stroke-width="5" filter="url(#glow)"/><text x="132" y="102" fill="#9fb0d0" font-size="13">stress / strain</text>`,
+      measurement: `<line x1="72" y1="174" x2="310" y2="174" stroke="#77f7ff" stroke-width="5"/><path d="M72 160 V190 M112 166 V182 M152 160 V190 M192 166 V182 M232 160 V190 M272 166 V182 M310 160 V190" stroke="#a855f7" stroke-width="3"/><text x="104" y="132" fill="#9fb0d0" font-size="13">least count and units</text>`,
+      energy: `<path d="M56 180 C110 42 200 42 256 180" fill="none" stroke="url(#g)" stroke-width="5" filter="url(#glow)"/><circle cx="154" cy="82" r="18" fill="#77f7ff"/><text x="128" y="210" fill="#9fb0d0" font-size="13">potential to kinetic</text>`,
+      forces: `<circle cx="190" cy="142" r="18" fill="#77f7ff" filter="url(#glow)"/><path d="M190 142 L190 54 M190 142 L282 142 M190 142 L112 196 M190 142 L98 88" stroke="url(#g)" stroke-width="4"/><text x="202" y="64" fill="#9fb0d0" font-size="13">forces</text>`
+    };
+    const key = type === "linear-motion" ? "linear" : type;
+    return `<svg viewBox="0 0 380 240" role="img" aria-label="${title} diagram">
+      <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#77f7ff"/></marker></defs>
+      ${common}
+      ${diagrams[key] || diagrams.forces}
+    </svg>`;
+  }
+
+  function renderFormulas() {
+    const formulas = data.chapters.flatMap((chapter) =>
+      chapter.formulas.map((formula) => ({ ...formula, chapter: chapter.title }))
+    );
+    const draw = () => {
+      const term = $("#formulaSearch").value.trim().toLowerCase();
+      const filtered = formulas.filter((item) =>
+        `${item.chapter} ${item.expression} ${item.meaning}`.toLowerCase().includes(term)
+      );
+      $("#formulaGrid").innerHTML = filtered.map((item) => `
+        <article class="formula-card">
+          <div class="section-kicker">${item.chapter}</div>
+          <span class="formula-code">${item.expression}</span>
+          <p>${item.meaning}</p>
+          <button class="copy-button" data-copy="${escapeAttr(item.expression)}">Copy Formula</button>
+        </article>
+      `).join("");
+    };
+    $("#formulaSearch").addEventListener("input", draw);
+    $("#formulaGrid").addEventListener("click", async (event) => {
+      const button = event.target.closest("[data-copy]");
+      if (!button) return;
+      await copyText(button.dataset.copy);
+      button.textContent = "Copied";
+      ping(880, 0.025);
+      setTimeout(() => (button.textContent = "Copy Formula"), 900);
+    });
+    draw();
+  }
+
+  function escapeAttr(text) {
+    return text.replaceAll('"', "&quot;");
+  }
+
+  async function copyText(text) {
+    if (navigator.clipboard?.writeText) {
+      try {
+        await navigator.clipboard.writeText(text);
+        return;
+      } catch {
+        // Local file previews can block clipboard access, so fall back to a DOM copy.
+      }
+    }
+    const input = document.createElement("textarea");
+    input.value = text;
+    input.setAttribute("readonly", "");
+    input.style.position = "fixed";
+    input.style.opacity = "0";
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand("copy");
+    input.remove();
+  }
+
+  function renderPyqs() {
+    $("#pyqList").innerHTML = data.chapters.map((chapter, index) => `
+      <article class="pyq-card">
+        <span class="chapter-index">${String(index + 1).padStart(2, "0")}</span>
+        <h3>${chapter.title}</h3>
+        <ol>
+          ${chapter.questions.map((question) => `<li>${question}</li>`).join("")}
+          <li>Draw a neat labelled diagram related to ${chapter.title} and explain the terms.</li>
+        </ol>
+      </article>
+    `).join("");
+  }
+
+  function setupQuiz() {
+    $("#quizChapter").innerHTML = `
+      <option value="All">All Chapters</option>
+      ${data.chapters.map((chapter) => `<option value="${chapter.id}">${chapter.title}</option>`).join("")}
+    `;
+    $("#startQuiz").addEventListener("click", startQuiz);
+    $("#shuffleQuiz").addEventListener("click", startQuiz);
+    startQuiz();
+  }
+
+  function startQuiz() {
+    const chapter = $("#quizChapter").value;
+    const difficulty = $("#quizDifficulty").value;
+    const limit = Math.max(5, Math.min(Number($("#quizLimit").value) || 15, data.mcqs.length));
+    const pool = data.mcqs.filter((question) =>
+      (chapter === "All" || question.c === chapter) &&
+      (difficulty === "All" || question.d === difficulty)
+    );
+    state.quiz.questions = shuffle(pool).slice(0, Math.min(limit, pool.length));
+    state.quiz.answered = new Map();
+    state.quiz.score = 0;
+    state.quiz.startedAt = Date.now();
+    clearInterval(state.quiz.timerId);
+    state.quiz.timerId = setInterval(updateTimer, 1000);
+    updateTimer();
+    renderQuiz();
+    updateQuizStats();
+    markStudyDay();
+    ping(700, 0.02);
+  }
+
+  function renderQuiz() {
+    if (!state.quiz.questions.length) {
+      $("#quizBoard").innerHTML = `<article class="quiz-question"><h3>No questions found for this filter.</h3></article>`;
+      return;
+    }
+    $("#quizBoard").innerHTML = state.quiz.questions.map((question, index) => `
+      <article class="quiz-question" data-question="${index}">
+        <div class="question-head">
+          <h3>${index + 1}. ${question.q}</h3>
+          <span class="difficulty-pill">${question.d}</span>
+        </div>
+        <div class="answers-grid">
+          ${question.o.map((option, optionIndex) => `
+            <button class="option-button" data-option="${optionIndex}">${option}</button>
+          `).join("")}
+        </div>
+      </article>
+    `).join("");
+
+    $("#quizBoard").onclick = (event) => {
+      const button = event.target.closest("[data-option]");
+      if (!button) return;
+      const card = event.target.closest("[data-question]");
+      checkAnswer(Number(card.dataset.question), Number(button.dataset.option), card);
+    };
+  }
+
+  function checkAnswer(questionIndex, optionIndex, card) {
+    if (state.quiz.answered.has(questionIndex)) return;
+    const question = state.quiz.questions[questionIndex];
+    const correct = question.a === optionIndex;
+    state.quiz.answered.set(questionIndex, correct);
+    if (correct) state.quiz.score += 1;
+
+    $$("[data-option]", card).forEach((button) => {
+      const selected = Number(button.dataset.option);
+      button.disabled = true;
+      if (selected === question.a) button.classList.add("correct");
+      if (selected === optionIndex && !correct) button.classList.add("wrong");
+    });
+
+    updateQuizStats();
+    ping(correct ? 920 : 260, correct ? 0.025 : 0.018);
+    if (state.quiz.answered.size === state.quiz.questions.length) finishQuiz();
+  }
+
+  function updateQuizStats() {
+    const total = state.quiz.questions.length;
+    const answered = state.quiz.answered.size;
+    $("#scoreCounter").textContent = `${state.quiz.score} / ${total}`;
+    const percent = total ? Math.round((answered / total) * 100) : 0;
+    $("#progressBar").style.width = `${percent}%`;
+    $("#progressText").textContent = `${percent}%`;
+  }
+
+  function updateTimer() {
+    const elapsed = Math.floor((Date.now() - state.quiz.startedAt) / 1000);
+    const minutes = String(Math.floor(elapsed / 60)).padStart(2, "0");
+    const seconds = String(elapsed % 60).padStart(2, "0");
+    $("#timer").textContent = `${minutes}:${seconds}`;
+  }
+
+  function finishQuiz() {
+    clearInterval(state.quiz.timerId);
+    const total = state.quiz.questions.length || 1;
+    const percent = Math.round((state.quiz.score / total) * 100);
+    const best = Math.max(store.get("physRizzBest", 0), percent);
+    store.set("physRizzBest", best);
+    $("#bestScore").textContent = `${best}%`;
+
+    const board = store.get("physRizzLeaderboard", []);
+    board.push({ name: "You", score: percent, date: new Date().toLocaleDateString() });
+    store.set("physRizzLeaderboard", board.sort((a, b) => b.score - a.score).slice(0, 5));
+    renderLeaderboard();
+  }
+
+  function setupSmartCards() {
+    $("#bestScore").textContent = `${store.get("physRizzBest", 0)}%`;
+    renderLeaderboard();
+    renderQod();
+    rotateQuote();
+    rotateFact();
+    $("#quoteButton").addEventListener("click", rotateQuote);
+    $("#factButton").addEventListener("click", rotateFact);
+    renderStreak();
+  }
+
+  function renderLeaderboard() {
+    const saved = store.get("physRizzLeaderboard", []);
+    const rows = saved.length ? saved : [
+      { name: "Asha", score: 96, date: "Demo" },
+      { name: "Nikhil", score: 92, date: "Demo" },
+      { name: "You", score: store.get("physRizzBest", 0), date: "Local" }
+    ];
+    $("#leaderboardList").innerHTML = rows.map((row) => `<li><strong>${row.name}</strong> - ${row.score}% <span>${row.date}</span></li>`).join("");
+  }
+
+  function renderQod() {
+    const index = dayNumber() % data.mcqs.length;
+    const question = data.mcqs[index];
+    $("#qodQuestion").textContent = question.q;
+    $("#qodOptions").innerHTML = question.o.map((option, optionIndex) =>
+      `<button class="option-button" data-qod="${optionIndex}">${option}</button>`
+    ).join("");
+    $("#qodResult").textContent = "";
+    $("#qodOptions").onclick = (event) => {
+      const button = event.target.closest("[data-qod]");
+      if (!button) return;
+      const selected = Number(button.dataset.qod);
+      $$("[data-qod]").forEach((item) => {
+        item.disabled = true;
+        if (Number(item.dataset.qod) === question.a) item.classList.add("correct");
+      });
+      if (selected === question.a) {
+        $("#qodResult").textContent = "Correct. Streak charged.";
+        markStudyDay();
+        ping(960, 0.025);
+      } else {
+        button.classList.add("wrong");
+        $("#qodResult").textContent = "Nice try. Check the highlighted answer.";
+        ping(260, 0.018);
+      }
+    };
+  }
+
+  function rotateQuote() {
+    $("#quoteText").textContent = data.quotes[Math.floor(Math.random() * data.quotes.length)];
+    ping(620, 0.015);
+  }
+
+  function rotateFact() {
+    $("#factText").textContent = data.facts[Math.floor(Math.random() * data.facts.length)];
+    ping(660, 0.015);
+  }
+
+  function dayNumber() {
+    return Math.floor(Date.now() / 86400000);
+  }
+
+  function todayKey() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  function markStudyDay() {
+    const streak = store.get("physRizzStreak", { count: 0, last: "" });
+    const today = todayKey();
+    if (streak.last === today) {
+      renderStreak();
+      return;
+    }
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    const count = streak.last === yesterday ? streak.count + 1 : 1;
+    store.set("physRizzStreak", { count, last: today });
+    renderStreak();
+  }
+
+  function renderStreak() {
+    $("#streakCount").textContent = store.get("physRizzStreak", { count: 0 }).count || 0;
+  }
+
+  function setupScrollTop() {
+    const button = $("#scrollTop");
+    window.addEventListener("scroll", () => button.classList.toggle("visible", scrollY > 500));
+    button.addEventListener("click", () => scrollTo({ top: 0, behavior: "smooth" }));
+  }
+
+  function shuffle(items) {
+    const copy = [...items];
+    for (let i = copy.length - 1; i > 0; i -= 1) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
+  }
+
+  function setupSimulations() {
+    $("#simTabs").addEventListener("click", (event) => {
+      const button = event.target.closest("[data-sim]");
+      if (!button) return;
+      state.sim = button.dataset.sim;
+      state.simTime = 0;
+      $$("#simTabs button").forEach((item) => item.classList.toggle("active", item === button));
+      renderSimControls();
+      ping(720, 0.018);
+    });
+    $("#resetSim").addEventListener("click", () => {
+      state.simTime = 0;
+      ping(680, 0.018);
+    });
+    renderSimControls();
+    requestAnimationFrame(drawSimulation);
+  }
+
+  function renderSimControls() {
+    const labels = {
+      projectile: [["speed", 20, 90, "Speed"], ["angle", 15, 75, "Angle"], ["gravity", 2, 18, "Gravity"]],
+      pendulum: [["length", 90, 260, "Length"], ["angle", 10, 55, "Angle"], ["gravity", 2, 18, "Gravity"]],
+      freefall: [["height", 120, 360, "Height"], ["gravity", 2, 18, "Gravity"], ["mass", 1, 12, "Mass"]],
+      wave: [["amplitude", 18, 90, "Amplitude"], ["frequency", 1, 6, "Frequency"], ["wavelength", 90, 260, "Wavelength"]],
+      newton: [["force", 10, 90, "Force"], ["mass", 1, 14, "Mass"], ["friction", 0, 30, "Friction"]]
+    };
+    const titles = {
+      projectile: "Projectile Motion",
+      pendulum: "Pendulum Motion",
+      freefall: "Free Fall",
+      wave: "Wave Motion",
+      newton: "Newton's Laws Visualization"
+    };
+    $("#simTitle").textContent = titles[state.sim];
+    $("#simControls").innerHTML = labels[state.sim].map(([key, min, max, label]) => `
+      <label>${label}: <span id="sim-${key}">${state.simValues[state.sim][key]}</span>
+        <input type="range" min="${min}" max="${max}" step="${key === "gravity" ? "0.1" : "1"}" value="${state.simValues[state.sim][key]}" data-control="${key}">
+      </label>
+    `).join("");
+    $("#simControls").oninput = (event) => {
+      const input = event.target.closest("[data-control]");
+      if (!input) return;
+      const key = input.dataset.control;
+      state.simValues[state.sim][key] = Number(input.value);
+      $(`#sim-${key}`).textContent = input.value;
+    };
+  }
+
+  function drawSimulation(timestamp) {
+    const canvas = $("#simCanvas");
+    const ctx = canvas.getContext("2d");
+    fitCanvas(canvas);
+    const w = canvas.width;
+    const h = canvas.height;
+    state.simTime += 0.016;
+    ctx.clearRect(0, 0, w, h);
+    drawGrid(ctx, w, h);
+    const draw = {
+      projectile: drawProjectile,
+      pendulum: drawPendulum,
+      freefall: drawFreefall,
+      wave: drawWave,
+      newton: drawNewton
+    }[state.sim];
+    draw(ctx, w, h, state.simTime, state.simValues[state.sim]);
+    requestAnimationFrame(drawSimulation);
+  }
+
+  function fitCanvas(canvas) {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    const width = Math.max(320, Math.floor(rect.width * dpr));
+    const height = Math.max(180, Math.floor(rect.height * dpr));
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+    }
+  }
+
+  function drawGrid(ctx, w, h) {
+    ctx.fillStyle = getComputedStyle(document.body).getPropertyValue("--bg").trim();
+    ctx.fillRect(0, 0, w, h);
+    ctx.strokeStyle = "rgba(119,247,255,0.08)";
+    ctx.lineWidth = 1;
+    for (let x = 0; x < w; x += 48) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, h);
+      ctx.stroke();
+    }
+    for (let y = 0; y < h; y += 48) {
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(w, y);
+      ctx.stroke();
+    }
+  }
+
+  function neonStroke(ctx, color = "#27d8ff", width = 4) {
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 18;
+  }
+
+  function neonFill(ctx, color = "#77f7ff") {
+    ctx.fillStyle = color;
+    ctx.shadowColor = color;
+    ctx.shadowBlur = 22;
+  }
+
+  function drawProjectile(ctx, w, h, t, values) {
+    const g = values.gravity * 9;
+    const speed = values.speed * 6;
+    const angle = (values.angle * Math.PI) / 180;
+    const origin = { x: w * 0.08, y: h * 0.84 };
+    const loop = (t * 1.2) % 5;
+    const points = [];
+    for (let i = 0; i < 160; i += 1) {
+      const time = i / 28;
+      const x = origin.x + Math.cos(angle) * speed * time;
+      const y = origin.y - (Math.sin(angle) * speed * time - 0.5 * g * time * time);
+      if (x > w * 0.96 || y > origin.y) break;
+      points.push({ x, y });
+    }
+    neonStroke(ctx);
+    ctx.beginPath();
+    points.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)));
+    ctx.stroke();
+    const bx = origin.x + Math.cos(angle) * speed * loop;
+    const by = origin.y - (Math.sin(angle) * speed * loop - 0.5 * g * loop * loop);
+    const ball = by > origin.y ? origin : { x: bx, y: by };
+    neonFill(ctx);
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, 12, 0, Math.PI * 2);
+    ctx.fill();
+    label(ctx, "Range, time of flight, and maximum height", 24, 34);
+  }
+
+  function drawPendulum(ctx, w, h, t, values) {
+    const pivot = { x: w / 2, y: h * 0.18 };
+    const length = values.length * (w / 900);
+    const theta0 = (values.angle * Math.PI) / 180;
+    const theta = theta0 * Math.cos(Math.sqrt(values.gravity / (values.length / 100)) * t);
+    const bob = { x: pivot.x + length * Math.sin(theta), y: pivot.y + length * Math.cos(theta) };
+    neonStroke(ctx, "#a855f7", 5);
+    ctx.beginPath();
+    ctx.moveTo(pivot.x, pivot.y);
+    ctx.lineTo(bob.x, bob.y);
+    ctx.stroke();
+    neonFill(ctx, "#77f7ff");
+    ctx.beginPath();
+    ctx.arc(bob.x, bob.y, 18, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "#9fb0d0";
+    ctx.fillRect(pivot.x - 70, pivot.y - 8, 140, 8);
+    label(ctx, "T = 2pi sqrt(l / g)", 24, 34);
+  }
+
+  function drawFreefall(ctx, w, h, t, values) {
+    const ground = h * 0.84;
+    const startY = h * 0.12;
+    const fallTime = (t * 1.1) % 4;
+    const y = Math.min(ground - 18, startY + 0.5 * values.gravity * 42 * fallTime * fallTime);
+    neonStroke(ctx, "#77f7ff", 3);
+    ctx.beginPath();
+    ctx.moveTo(w * 0.55, startY);
+    ctx.lineTo(w * 0.55, ground);
+    ctx.stroke();
+    neonFill(ctx, "#a855f7");
+    ctx.beginPath();
+    ctx.arc(w * 0.55, y, 18 + values.mass, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = "rgba(119,247,255,0.35)";
+    ctx.beginPath();
+    ctx.moveTo(w * 0.12, ground);
+    ctx.lineTo(w * 0.9, ground);
+    ctx.stroke();
+    label(ctx, "s = (1/2)gt^2, v = gt", 24, 34);
+  }
+
+  function drawWave(ctx, w, h, t, values) {
+    const mid = h / 2;
+    neonStroke(ctx, "#27d8ff", 4);
+    ctx.beginPath();
+    for (let x = 0; x <= w; x += 4) {
+      const y = mid + values.amplitude * Math.sin((x / values.wavelength) * Math.PI * 2 - t * values.frequency);
+      x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = "rgba(255,255,255,0.16)";
+    ctx.beginPath();
+    ctx.moveTo(0, mid);
+    ctx.lineTo(w, mid);
+    ctx.stroke();
+    label(ctx, "v = f lambda", 24, 34);
+  }
+
+  function drawNewton(ctx, w, h, t, values) {
+    const a = Math.max(0, (values.force - values.friction) / values.mass);
+    const x = w * 0.15 + ((t * a * 28) % (w * 0.62));
+    const y = h * 0.64;
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "rgba(119,247,255,0.15)";
+    ctx.fillRect(0, y + 42, w, 6);
+    neonFill(ctx, "#77f7ff");
+    ctx.fillRect(x, y, 92, 54);
+    neonStroke(ctx, "#a855f7", 5);
+    ctx.beginPath();
+    ctx.moveTo(x + 98, y + 27);
+    ctx.lineTo(x + 98 + values.force * 2.2, y + 27);
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "#9fb0d0";
+    ctx.font = `${Math.max(14, w / 58)}px Inter`;
+    ctx.fillText(`a = ${(a).toFixed(2)} units`, 24, 66);
+    label(ctx, "Net force = applied force - friction", 24, 34);
+  }
+
+  function label(ctx, text, x, y) {
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = "#77f7ff";
+    ctx.font = "700 18px Inter";
+    ctx.fillText(text, x, y);
+  }
+
+  function initCanvases() {
+    animateSpace();
+    animateHero();
+  }
+
+  function animateSpace() {
+    const canvas = $("#spaceCanvas");
+    const ctx = canvas.getContext("2d");
+    const particles = Array.from({ length: 90 }, () => ({
+      x: Math.random(),
+      y: Math.random(),
+      vx: (Math.random() - 0.5) * 0.0005,
+      vy: (Math.random() - 0.5) * 0.0005,
+      r: Math.random() * 1.8 + 0.5
+    }));
+    function draw() {
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      const w = innerWidth * dpr;
+      const h = innerHeight * dpr;
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+      }
+      ctx.clearRect(0, 0, w, h);
+      particles.forEach((p, index) => {
+        p.x = (p.x + p.vx + 1) % 1;
+        p.y = (p.y + p.vy + 1) % 1;
+        const x = p.x * w;
+        const y = p.y * h;
+        ctx.fillStyle = index % 3 === 0 ? "rgba(168,85,247,0.75)" : "rgba(119,247,255,0.72)";
+        ctx.beginPath();
+        ctx.arc(x, y, p.r * dpr, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      ctx.strokeStyle = "rgba(119,247,255,0.07)";
+      particles.forEach((a, i) => {
+        for (let j = i + 1; j < particles.length; j += 1) {
+          const b = particles[j];
+          const dx = (a.x - b.x) * w;
+          const dy = (a.y - b.y) * h;
+          const dist = Math.hypot(dx, dy);
+          if (dist < 150 * dpr) {
+            ctx.beginPath();
+            ctx.moveTo(a.x * w, a.y * h);
+            ctx.lineTo(b.x * w, b.y * h);
+            ctx.stroke();
+          }
+        }
+      });
+      requestAnimationFrame(draw);
+    }
+    draw();
+  }
+
+  function animateHero() {
+    const canvas = $("#heroCanvas");
+    const ctx = canvas.getContext("2d");
+    let t = 0;
+    function draw() {
+      fitCanvas(canvas);
+      const w = canvas.width;
+      const h = canvas.height;
+      t += 0.012;
+      ctx.clearRect(0, 0, w, h);
+      ctx.save();
+      ctx.translate(w / 2, h / 2);
+      for (let i = 0; i < 5; i += 1) {
+        ctx.rotate(t * (i % 2 ? -0.55 : 0.45));
+        neonStroke(ctx, i % 2 ? "#a855f7" : "#27d8ff", 2);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, w * (0.18 + i * 0.045), h * (0.07 + i * 0.026), 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      neonFill(ctx, "#77f7ff");
+      ctx.beginPath();
+      ctx.arc(0, 0, 18, 0, Math.PI * 2);
+      ctx.fill();
+      for (let i = 0; i < 8; i += 1) {
+        const angle = t * (0.7 + i * 0.08) + i;
+        const rx = w * (0.2 + (i % 3) * 0.065);
+        const ry = h * (0.09 + (i % 2) * 0.05);
+        neonFill(ctx, i % 2 ? "#a855f7" : "#77f7ff");
+        ctx.beginPath();
+        ctx.arc(Math.cos(angle) * rx, Math.sin(angle) * ry, 7, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+      requestAnimationFrame(draw);
+    }
+    draw();
+  }
+})();
+
+  </script>
+</body>
+</html>
